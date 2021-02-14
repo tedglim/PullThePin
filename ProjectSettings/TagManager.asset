@@ -13,8 +13,8 @@ TagManager:
   - UI
   - 
   - 
-  - 
-  - 
+  - Background
+  - Interactive_Env
   - 
   - 
   - 
@@ -40,4 +40,10 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Env
+    uniqueID: 3060805753
+    locked: 0
+  - name: Building_Env
+    uniqueID: 2111671259
     locked: 0
