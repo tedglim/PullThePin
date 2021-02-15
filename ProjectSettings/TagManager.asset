@@ -41,9 +41,12 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: Env
+  - name: Sky_BG_Env
     uniqueID: 3060805753
     locked: 0
-  - name: Building_Env
+  - name: Building_BG_Env
     uniqueID: 2111671259
+    locked: 0
+  - name: FG_Env
+    uniqueID: 1806970347
     locked: 0
