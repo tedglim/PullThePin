@@ -2,55 +2,64 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class PinScript : MonoBehaviour
 {
-    private Vector2 currPinPos;
-    private Vector2 prevMousePos;
-    private Vector2 deltaMousePos;
+    // [SerializeField]
+    private GameObject pin;
+    private string tappedPinName;
+    private Vector3 initPinPos;
+    private Vector2 clickStartPos;
+    private Vector2 clickEndPos;
+    private Vector2 delta;
+
     [SerializeField]
-    private float pwr;
-    private bool canMovePin;
+    private bool right;
+    [SerializeField]
+    private bool left;
+    [SerializeField]
+    private float speed;
+    [SerializeField]
+    private float moveLimit;
+    
 
     // Start is called before the first frame update
     void Start()
     {
-        currPinPos = (Vector2) transform.position;
-        deltaMousePos = Vector2.zero;
-        canMovePin =  false;
+        pin = this.transform.gameObject;
+        initPinPos = pin.transform.position;
+        delta = Vector2.zero;
     }
 
     // Update is called once per frame
     void Update()
     {
-        // if(Input.GetMouseButton(0))
-        // {
-
-        // }
-        // else 
         if(Input.GetMouseButtonDown(0))
         {
-            Debug.Log("Holding");
+            Debug.Log("Pressed");
             Vector2 mousePos2D = (Vector2) Camera.main.ScreenToWorldPoint(Input.mousePosition);
             RaycastHit2D hit2D = Physics2D.Raycast(mousePos2D, Vector2.zero);
-            if(hit2D.collider != null || canMovePin)
+            if(hit2D.collider != null)
             {
-                Debug.Log("HEY");
-                Debug.Log(hit2D.collider.gameObject.name);
-
-                canMovePin = true;
-                deltaMousePos.x = mousePos2D.x - prevMousePos.x;
-                hit2D.collider.gameObject.transform.position += (Vector3) deltaMousePos * pwr * Time.deltaTime;
-                prevMousePos = mousePos2D;
-                // deltaMousePos = mousePos2D - prevMousPos;
-                // currPinPos += deltaMousePos;
+                clickStartPos = mousePos2D;
+                tappedPinName = hit2D.collider.gameObject.transform.parent.name;
             }
         } else if(Input.GetMouseButtonUp(0))
         {
             Debug.Log("Released");
-            canMovePin = false;
+            clickEndPos = (Vector2) Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            delta = clickEndPos - clickStartPos;
         }
-        // Input.GetMouseButton()
-        // Input.GetMouseButtonDown()
-        // Input.GetMouseButtonUp()
+
+        if(tappedPinName == pin.name && right && delta.x > 0 && (pin.transform.position.x - initPinPos.x) < moveLimit)
+        {
+            Debug.Log("right: " + (pin.transform.position.x - initPinPos.x));
+            pin.transform.Translate(Vector2.right * delta.x * speed * Time.deltaTime);
+        }
+        if(tappedPinName == pin.name && left && delta.x < 0 && (initPinPos.x - pin.transform.position.x) < moveLimit)
+        {
+            Debug.Log("left: " + (initPinPos.x - pin.transform.position.x));
+            pin.transform.Translate(Vector2.left * delta.x * speed * Time.deltaTime);
+        }
     }
 }
