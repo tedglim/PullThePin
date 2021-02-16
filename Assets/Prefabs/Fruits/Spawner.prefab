@@ -43,8 +43,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b37f610f4fa44585b697a6ad581ff61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnNum: 15
+  spawnNum: 9
   spawnObjs:
   - {fileID: 4344538105940424282, guid: 8f713fc0e081646e3be1cca97c68391c, type: 3}
-  - {fileID: 6954092383769622383, guid: 607e263915d0b420a8e7674f3a4975a7, type: 3}
-  - {fileID: 2883165774543357158, guid: 52bd9e1000e5f41c1a599ebcad1225f3, type: 3}
+  - {fileID: 1775133347079202808, guid: 607e263915d0b420a8e7674f3a4975a7, type: 3}
+  - {fileID: 6770347052665037498, guid: 52bd9e1000e5f41c1a599ebcad1225f3, type: 3}

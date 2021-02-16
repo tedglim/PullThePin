@@ -26,9 +26,4 @@ public class SpawnerScript : MonoBehaviour
             Instantiate(spawnObjs[i%spawnObjs.Length], transform.position, Quaternion.identity);
         }
     }
-    // // Update is called once per frame
-    // void Update()
-    // {
-        
-    // }
 }
