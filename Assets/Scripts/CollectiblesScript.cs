@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ColletiblesScript : MonoBehaviour
+public class CollectiblesScript : MonoBehaviour
 {
     // Start is called before the first frame update
     void Start()

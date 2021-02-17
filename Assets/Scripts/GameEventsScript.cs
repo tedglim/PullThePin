@@ -7,8 +7,4 @@ public class GameEventsScript : MonoBehaviour
 {
     public static UnityEvent victory = new UnityEvent();
     public static UnityEvent defeat = new UnityEvent();
-    
-
-
-
 }

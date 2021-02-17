@@ -1,18 +1,26 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class PlayerScript : MonoBehaviour
 {
     private GameObject player;
     private float horizMove;
     [SerializeField]
+    private float rMoveTime;
+    [SerializeField]
+    private float lMoveTime;
+    [SerializeField]
     private float spd;
-    private bool facingRight;
+    private float duration;
     [SerializeField]
     private float hurtDuration;
     [SerializeField]
     private float hurtColorInterval;
+    private bool isCollecting;
+    [SerializeField]
+    private GameObject spawner;
     [SerializeField]
     private GameObject soundManagerGObj;
     private SoundManagerScript soundManager;
@@ -23,36 +31,57 @@ public class PlayerScript : MonoBehaviour
     void Start()
     {
         player = this.transform.gameObject;
-        facingRight = true;
+        isCollecting = false;
+        duration = 0f;
         soundManager = soundManagerGObj.GetComponent<SoundManagerScript>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        horizMove = Input.GetAxisRaw("Horizontal") * spd;
-        FlipPlayer(horizMove);
-        animator.SetFloat("Speed", Mathf.Abs(horizMove));
-    }
 
-    private void FlipPlayer(float dir)
-    {
-        if (facingRight && dir < 0)
-        {
-            facingRight = false;
-            player.GetComponent<SpriteRenderer>().flipX = true;
-        }
-        if (!facingRight && dir > 0)
-        {
-            facingRight = true;
-            player.GetComponent<SpriteRenderer>().flipX = false;
-        }
     }
 
     void FixedUpdate()
     {
+        if (isCollecting)
+        {
+            AutoMove();
+        }
+    }
 
-        player.transform.Translate(Vector2.right * horizMove * Time.deltaTime);
+    private void AutoMove()
+    {
+        if (duration < rMoveTime)
+        {
+            horizMove = spd;
+            player.transform.Translate(Vector2.right * horizMove * Time.deltaTime);
+        }
+        else if (duration < rMoveTime + lMoveTime)
+        {
+            horizMove = -spd;
+            FlipPlayer(horizMove);
+            player.transform.Translate(Vector2.right * horizMove * Time.deltaTime);
+        }
+        else
+        {
+            isCollecting = false;
+            horizMove = 0;
+        }
+        animator.SetFloat("Speed", Mathf.Abs(horizMove));
+        duration += Time.deltaTime;
+    }
+
+    private void FlipPlayer(float dir)
+    {
+        if (dir < 0)
+        {
+            player.GetComponent<SpriteRenderer>().flipX = true;
+        }
+        if (dir > 0)
+        {
+            player.GetComponent<SpriteRenderer>().flipX = false;
+        }
     }
 
     void OnTriggerEnter2D(Collider2D other)
@@ -60,21 +89,27 @@ public class PlayerScript : MonoBehaviour
         Debug.Log(other.gameObject.name);
         if (other.gameObject.tag == "Enemy")
         {
-            Debug.Log("Lose");
+            // Debug.Log("Lose");
+            soundManager.PlaySound("Hurt");
             LoseGame();
         }
         else if (other.gameObject.tag == "Collectible")
         {
-            Debug.Log("Win");
+            // Debug.Log("Win");
+            soundManager.PlaySound("Collect");
+            Destroy(other.gameObject);
             WinGame();
         }
     }
 
     private void LoseGame()
     {
-        soundManager.PlaySound("Hurt");
         StartCoroutine(FlashRed());
-        //Show Loss Screen
+        if (!GameStateScript.IsGameOver)
+        {
+            GameStateScript.IsGameOver = true;
+            StartCoroutine(ShowDefeat());
+        }
     }
 
     IEnumerator FlashRed()
@@ -98,17 +133,25 @@ public class PlayerScript : MonoBehaviour
         }
     }
 
+    IEnumerator ShowDefeat()
+    {
+        yield return new WaitForSeconds(hurtDuration);
+        GameEventsScript.defeat.Invoke();
+    }
+
     private void WinGame()
     {
-        //if there are collectibles
-        //if there are collectibles touching me,
-        //destroy tem and make noise
-        //else
-        //move towards nearby one.
-        //Collect and destroy all coins i'm touching
-        //find the rest
-        soundManager.PlaySound("Collect");
-        //Make Collect Sound
-        //Show Win Screen
+        isCollecting = true;
+        if (!GameStateScript.IsGameOver)
+        {
+            GameStateScript.IsGameOver = true;
+            StartCoroutine(ShowVictory());
+        }
+    }
+
+    IEnumerator ShowVictory()
+    {
+        yield return new WaitForSeconds(hurtDuration);
+        GameEventsScript.victory.Invoke();
     }
 }

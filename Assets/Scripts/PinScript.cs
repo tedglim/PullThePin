@@ -6,12 +6,12 @@ using UnityEngine;
 public class PinScript : MonoBehaviour
 {
     private GameObject pin;
-    private string tappedPinName;
+    private GameObject tappedPin;
     private Vector3 initPinPos;
     private Vector2 clickStartPos;
     private Vector2 clickEndPos;
     private Vector2 delta;
-    
+
     [SerializeField]
     private bool right;
     [SerializeField]
@@ -20,7 +20,7 @@ public class PinScript : MonoBehaviour
     private float speed;
     [SerializeField]
     private float moveLimit;
-    
+
 
     // Start is called before the first frame update
     void Start()
@@ -33,33 +33,52 @@ public class PinScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetMouseButtonDown(0))
+        if (!GameStateScript.IsPinMoving && Input.GetMouseButtonDown(0))
         {
-            // Debug.Log("Pressed");
-            Vector2 mousePos2D = (Vector2) Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Debug.Log("Pressed");
+            Vector2 mousePos2D = (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition);
             RaycastHit2D hit2D = Physics2D.Raycast(mousePos2D, Vector2.zero);
-            if(hit2D.collider != null)
+            if (hit2D.collider != null)
             {
                 clickStartPos = mousePos2D;
-                tappedPinName = hit2D.collider.gameObject.name;
+                tappedPin = hit2D.collider.gameObject;
                 // Debug.Log(tappedPinName);
             }
-        } else if(Input.GetMouseButtonUp(0))
+        }
+        else if (!GameStateScript.IsPinMoving && Input.GetMouseButtonUp(0))
         {
-            // Debug.Log("Released");
-            clickEndPos = (Vector2) Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Debug.Log("Released");
+            clickEndPos = (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition);
             delta = clickEndPos - clickStartPos;
         }
+    }
 
-        if(tappedPinName == pin.name && right && delta.x > 0 && (pin.transform.position.x - initPinPos.x) < moveLimit)
+    void FixedUpdate()
+    {
+        if (tappedPin != null)
         {
-            // Debug.Log("right: " + (pin.transform.position.x - initPinPos.x));
-            pin.transform.Translate(Vector2.up * delta.x * speed * Time.deltaTime);
+            if (tappedPin.name == pin.name && right && delta.x > 0 && (pin.transform.position.x - initPinPos.x) < moveLimit)
+            {
+                // Debug.Log("right: " + (pin.transform.position.x - initPinPos.x));
+                pin.transform.Translate(Vector2.up * speed * Time.deltaTime);
+                GameStateScript.IsPinMoving = true;
+            }
+            else if (tappedPin.name == pin.name && left && delta.x < 0 && (initPinPos.x - pin.transform.position.x) < moveLimit)
+            {
+                // Debug.Log("left: " + (initPinPos.x - pin.transform.position.x));
+                pin.transform.Translate(Vector2.down * speed * Time.deltaTime);
+                GameStateScript.IsPinMoving = true;
+            }
         }
-        if(tappedPinName == pin.name && left && delta.x < 0 && (initPinPos.x - pin.transform.position.x) < moveLimit)
+        if (right && (pin.transform.position.x - initPinPos.x) >= moveLimit)
         {
-            // Debug.Log("left: " + (initPinPos.x - pin.transform.position.x));
-            pin.transform.Translate(Vector2.down * delta.x * speed * Time.deltaTime);
+            Debug.Log("Unlock");
+            GameStateScript.IsPinMoving = false;
+        }
+        else if (left && (initPinPos.x - pin.transform.position.x) >= moveLimit)
+        {
+            Debug.Log("Unlock");
+            GameStateScript.IsPinMoving = false;
         }
     }
 }

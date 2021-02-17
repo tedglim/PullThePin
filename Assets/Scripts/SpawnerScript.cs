@@ -23,7 +23,8 @@ public class SpawnerScript : MonoBehaviour
     {
         for(int i = 0; i < num; i++)
         {
-            Instantiate(spawnObjs[i%spawnObjs.Length], transform.position, Quaternion.identity);
+            GameObject gObj = Instantiate(spawnObjs[i%spawnObjs.Length], transform.position, Quaternion.identity);
+            gObj.transform.parent = this.transform;
         }
     }
 }
