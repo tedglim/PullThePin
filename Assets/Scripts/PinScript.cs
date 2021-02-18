@@ -73,11 +73,13 @@ public class PinScript : MonoBehaviour
         {
             Debug.Log("Unlock");
             GameStateScript.IsPinMoving = false;
+            Destroy(pin.gameObject);
         }
         else if (left && (initPinPos.x - pin.transform.position.x) >= moveLimit)
         {
             Debug.Log("Unlock");
             GameStateScript.IsPinMoving = false;
+            Destroy(pin.gameObject);
         }
     }
 }
