@@ -7,6 +7,7 @@ public class EnemyScript : MonoBehaviour
     [SerializeField]
     private GameObject soundManagerGObj;
     private SoundManagerScript soundManager;
+    
     // Start is called before the first frame update
     void Start()
     {

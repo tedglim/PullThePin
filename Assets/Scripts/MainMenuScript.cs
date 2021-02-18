@@ -22,8 +22,6 @@ public class MainMenuScript : MonoBehaviour
     [SerializeField]
     private float delayButtons;
 
-
-
     // Start is called before the first frame update
     void Start()
     {
@@ -36,13 +34,7 @@ public class MainMenuScript : MonoBehaviour
         StartCoroutine(DoDelay(text03, delay03));
         StartCoroutine(DoDelay(buttons, delayButtons));
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
+    
     IEnumerator DoDelay(GameObject gObj, float time)
     {
         yield return new WaitForSeconds(time);

@@ -26,7 +26,7 @@ public class PlayerScript : MonoBehaviour
     private SoundManagerScript soundManager;
     [SerializeField]
     private Animator animator;
-
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -34,12 +34,6 @@ public class PlayerScript : MonoBehaviour
         isCollecting = false;
         duration = 0f;
         soundManager = soundManagerGObj.GetComponent<SoundManagerScript>();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 
     void FixedUpdate()

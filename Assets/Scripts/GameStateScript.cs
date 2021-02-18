@@ -6,6 +6,7 @@ public class GameStateScript : MonoBehaviour
 {
     private static bool isGameOver;
     private static bool isPinMoving;
+
     public static bool IsGameOver
     {
         get
@@ -17,6 +18,7 @@ public class GameStateScript : MonoBehaviour
             isGameOver = value;
         }
     }
+    
     public static bool IsPinMoving
     {
         get

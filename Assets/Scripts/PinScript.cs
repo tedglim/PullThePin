@@ -21,7 +21,6 @@ public class PinScript : MonoBehaviour
     [SerializeField]
     private float moveLimit;
 
-
     // Start is called before the first frame update
     void Start()
     {
