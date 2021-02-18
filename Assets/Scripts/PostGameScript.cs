@@ -42,6 +42,13 @@ public class PostGameScript : MonoBehaviour
 
     public void Reload()
     {
+        SceneManager.LoadSceneAsync(1);
+        GameStateScript.IsGameOver = false;
+        GameStateScript.IsPinMoving = false;
+    }
+
+    public void GoHome()
+    {
         SceneManager.LoadSceneAsync(0);
         GameStateScript.IsGameOver = false;
         GameStateScript.IsPinMoving = false;
