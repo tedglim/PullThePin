@@ -1,5 +1,5 @@
 # PullThePin
-IGG Interview Project
+Mini Project
 
 Task:
 1. Create 3 levels of a Pull the Pin Puzzle game
